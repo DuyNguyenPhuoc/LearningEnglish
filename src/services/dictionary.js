@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = '/api/dictionary';
-const CACHE_KEY = 'ev-trainer-cache-v2'; // Changed key to clear old incompatible cache
+const CACHE_KEY = 'ev-trainer-cache-v3'; // Clear cache for new API structure
 
 // Simple in-memory cache for the current session
 const memoryCache = {};

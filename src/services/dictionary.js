@@ -26,8 +26,9 @@ export const fetchWordDetails = async (word) => {
   }
 
   try {
-    // Calling our local Vite proxy
-    const response = await axios.get(`${API_BASE_URL}/${normalizedWord}`);
+    // Calling our local Vite proxy / Vercel Serverless Function
+    // Use query parameter for better compatibility with Vercel routing
+    const response = await axios.get(`${API_BASE_URL}?word=${normalizedWord}`);
     const result = response.data;
 
     // Save to Cache

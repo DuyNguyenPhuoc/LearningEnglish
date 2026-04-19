@@ -13,10 +13,10 @@ export default defineConfig({
           // Emulate Vercel's /api/dictionary?word=xxx
           if (req.url.startsWith('/api/dictionary')) {
             const url = new URL(req.url, `http://${req.headers.host}`);
-            const word = url.pathname.split('/').pop() || url.searchParams.get('word');
+            const word = url.searchParams.get('word') || url.pathname.split('/').pop();
             
             // Mock the Vercel req.query
-            req.query = { word };
+            req.query = { word: decodeURIComponent(word) };
             
             // Mock res.status and res.json for the serverless handler
             res.status = (code) => { res.statusCode = code; return res; };

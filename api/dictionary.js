@@ -2,8 +2,6 @@ import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
 
 export default async function handler(req, res) {
-  // Extract word from query parameter (Vercel routes /api/dictionary?word=diet)
-  // or from the URL path if we use a rewrite
   const { word } = req.query;
 
   if (!word) {
@@ -11,69 +9,115 @@ export default async function handler(req, res) {
   }
 
   try {
-    const url = `https://dictionary.cambridge.org/dictionary/english/${word}`;
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      }
-    });
+    const cambridgeUrl = `https://dictionary.cambridge.org/dictionary/english/${word}`;
+    const labanUrl = `https://dict.laban.vn/find?type=1&query=${word}`;
 
-    if (!response.ok) {
-      return res.status(404).json({ word, found: false, error: 'Word not found in Cambridge' });
-    }
+    const [cambridgeRes, labanRes] = await Promise.all([
+      fetch(cambridgeUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' }
+      }),
+      fetch(labanUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' }
+      })
+    ]);
 
-    const html = await response.text();
-    const $ = cheerio.load(html);
+    const cambridgeHtml = cambridgeRes.ok ? await cambridgeRes.text() : '';
+    const labanHtml = labanRes.ok ? await labanRes.text() : '';
 
-    const extractData = (regionClass) => {
-      const regionEl = $(`.${regionClass}.dpron-i`);
+    const $c = cheerio.load(cambridgeHtml);
+    const $l = cheerio.load(labanHtml);
+
+    // 1. Phonetics (keep existing logic)
+    const extractPhonetic = (regionClass) => {
+      const regionEl = $c(`.${regionClass}.dpron-i`);
       const ipa = regionEl.find('.ipa').first().text();
       let audio = regionEl.find('source[type="audio/mpeg"]').first().attr('src');
-      
-      if (audio && !audio.startsWith('http')) {
-        audio = `https://dictionary.cambridge.org${audio}`;
-      }
+      if (audio && !audio.startsWith('http')) audio = `https://dictionary.cambridge.org${audio}`;
       return { text: ipa ? `/${ipa}/` : '', audio };
     };
 
-    // Scrape all phonetics to find any with a dot if the regional ones are missing it
     const allPhoneticTexts = [];
-    $('.ipa').each((i, el) => {
-      const text = $(el).text();
+    $c('.ipa').each((i, el) => {
+      const text = $c(el).text();
       if (text) allPhoneticTexts.push(text);
     });
-
     const bestPhonetic = allPhoneticTexts.find(t => t.includes('.')) || allPhoneticTexts[0];
+
+    // 2. Multiple Entries (English)
+    const entries = [];
+    $c('.entry-body__el').each((i, el) => {
+      const pos = $c(el).find('.pos.dpos').first().text().trim();
+      const defs = [];
+      $c(el).find('.def.ddef_d.db').each((j, defEl) => {
+        const text = $c(defEl).text().trim();
+        if (text) defs.push(text);
+      });
+      if (pos || defs.length > 0) {
+        entries.push({ pos, definitions: defs });
+      }
+    });
+
+    // 3. Vietnamese Meanings (Multiple POS)
+    const vnEntries = [];
+    let currentVnPos = "";
+    $l('.content').find('div').each((i, el) => {
+      const $el = $l(el);
+      if ($el.hasClass('bg-grey') && $el.hasClass('bold')) {
+        currentVnPos = $el.text().trim();
+        vnEntries.push({ pos: currentVnPos, meanings: [] });
+      } else if ($el.hasClass('green') && $el.hasClass('bold')) {
+        const meaning = $el.text().trim();
+        if (vnEntries.length === 0) vnEntries.push({ pos: "Khác", meanings: [] });
+        vnEntries[vnEntries.length - 1].meanings.push(meaning);
+      }
+    });
+
+    // 4. Examples, Idioms, Collocations (standard logic)
+    const examples = [];
+    $c('.examp.dexamp').each((i, el) => {
+      const ex = $c(el).find('.eg.deg').text().trim();
+      if (ex && examples.length < 5) examples.push(ex);
+    });
+
+    const idioms = [];
+    $c('.idiom.didiom').each((i, el) => {
+      const title = $c(el).find('.idiom-title.didiom-title').text().trim();
+      const def = $c(el).find('.def.ddef_d').first().text().trim();
+      if (title) idioms.push({ title, definition: def });
+    });
+
+    const collocations = [];
+    $c('.smart-vocabulary .hul-u .item').each((i, el) => {
+      const text = $c(el).text().trim();
+      if (text && collocations.length < 8) collocations.push(text);
+    });
 
     const result = {
       word,
       phonetics: {
-        uk: extractData('uk'),
-        us: extractData('us')
+        uk: extractPhonetic('uk'),
+        us: extractPhonetic('us')
       },
-      definitions: $('.def.ddef_d').first().text().trim() || 'No definition found.',
-      found: true
+      definitions: $c('.def.ddef_d').first().text().trim() || 'No definition found.',
+      entries,
+      vnEntries,
+      examples,
+      idioms,
+      collocations,
+      found: entries.length > 0 || vnEntries.length > 0
     };
 
-    // If regional text is missing but we have a "best" text with a dot, use it
     if (bestPhonetic) {
       if (!result.phonetics.uk.text) result.phonetics.uk.text = `/${bestPhonetic}/`;
-      if (!result.phonetics.us.text) result.phonetics.us.text = `/${bestPhonetic}/`;
-      
-      // If the current text doesn't have a dot but bestPhonetic does, upgrade it
-      if (bestPhonetic.includes('.')) {
-        if (!result.phonetics.uk.text.includes('.')) result.phonetics.uk.text = `/${bestPhonetic}/`;
-        if (!result.phonetics.us.text.includes('.')) result.phonetics.us.text = `/${bestPhonetic}/`;
-      }
+      if (!result.phonetics.us.text.includes('.')) result.phonetics.us.text = `/${bestPhonetic}/`;
     }
 
-    // CORS headers just in case
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
     res.status(200).send(JSON.stringify(result));
 
   } catch (error) {
-    console.error(`Scraping error for ${word}:`, error.message);
+    console.error(`Multi-entry error for ${word}:`, error.message);
     res.status(500).json({ word, found: false, error: 'Internal Server Error during scraping' });
   }
 }

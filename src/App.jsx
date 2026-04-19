@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2 } from 'lucide-react';
+import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchWordDetails, parseTextToWords } from './services/dictionary';
 import WordCard from './components/WordCard';
@@ -11,6 +11,74 @@ function App() {
   const [activeTab, setActiveTab] = useState('vocabulary');
   const [playingIndex, setPlayingIndex] = useState(-1);
   const [playingAccent, setPlayingAccent] = useState(null); // 'uk' or 'us'
+  const [isListening, setIsListening] = useState(false);
+
+  // Speech Recognition Logic
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Trình duyệt của bạn không hỗ trợ nhận diện giọng nói. Vui lòng sử dụng Chrome hoặc Edge.");
+      return;
+    }
+
+    // Stop any existing instance if present
+    if (window._recognition) {
+      try { window._recognition.stop(); } catch(e) {}
+    }
+
+    const recognition = new SpeechRecognition();
+    window._recognition = recognition; // Prevent garbage collection
+    
+    recognition.lang = 'en-US';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => {
+      setIsListening(false);
+      window._recognition = null;
+    };
+    
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInputText(prev => prev ? `${prev} ${transcript}` : transcript);
+      // Auto-trigger analysis
+      setTimeout(() => {
+        document.getElementById('analyze-btn')?.click();
+      }, 500);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech Recognition Error:", event.error);
+      setIsListening(false);
+      
+      if (event.error === 'network') {
+        alert("Lỗi mạng (Network Error): Trình duyệt không thể kết nối tới máy chủ nhận diện giọng nói. Vui lòng kiểm tra kết nối internet hoặc thử lại sau.");
+      } else if (event.error === 'not-allowed') {
+        alert("Lỗi quyền truy cập: Vui lòng cho phép trình duyệt sử dụng Microphone.");
+      }
+    };
+
+    try {
+      recognition.start();
+    } catch (err) {
+      console.error("Failed to start recognition:", err);
+      setIsListening(false);
+    }
+  };
+
+  const startPlaybackAll = (accent) => {
+    setPlayingAccent(accent);
+    playNext(0, accent);
+  };
+
+  const stopPlayback = () => {
+    if (window._currentAudio) {
+      window._currentAudio.pause();
+    }
+    setPlayingIndex(-1);
+    setPlayingAccent(null);
+  };
 
   // Sequential Playback Engine
   const playNext = (index, accent) => {
@@ -42,19 +110,6 @@ function App() {
 
     // Store audio object so we can stop it if needed
     window._currentAudio = audio;
-  };
-
-  const startPlaybackAll = (accent) => {
-    setPlayingAccent(accent);
-    playNext(0, accent);
-  };
-
-  const stopPlayback = () => {
-    if (window._currentAudio) {
-      window._currentAudio.pause();
-    }
-    setPlayingIndex(-1);
-    setPlayingAccent(null);
   };
 
   // Load results from cache on mount
@@ -144,18 +199,34 @@ function App() {
                 className="w-full h-64 bg-slate-50/50 border border-slate-200 rounded-2xl p-4 text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-primary-500 transition-all resize-none mb-4"
               />
 
-              <button 
-                onClick={handleAnalyze}
-                disabled={isAnalyzing || !inputText.trim()}
-                className="btn-primary w-full flex items-center justify-center gap-2 group"
-              >
-                {isAnalyzing ? (
-                  <Loader2 size={20} className="animate-spin" />
-                ) : (
-                  <Search size={20} className="group-hover:scale-110 transition-transform" />
-                )}
-                {isAnalyzing ? 'Analyzing...' : 'Analyze Vocabulary'}
-              </button>
+              <div className="flex gap-2 mb-4">
+                <button 
+                  onClick={handleAnalyze}
+                  id="analyze-btn"
+                  disabled={isAnalyzing || !inputText.trim()}
+                  className="btn-primary flex-1 flex items-center justify-center gap-2 group"
+                >
+                  {isAnalyzing ? (
+                    <Loader2 size={20} className="animate-spin" />
+                  ) : (
+                    <Search size={20} className="group-hover:scale-110 transition-transform" />
+                  )}
+                  {isAnalyzing ? 'Analyzing...' : 'Analyze Vocabulary'}
+                </button>
+
+                <button
+                  onClick={startListening}
+                  disabled={isListening}
+                  className={`p-4 rounded-2xl flex items-center justify-center transition-all ${
+                    isListening 
+                      ? 'bg-red-100 text-red-600 animate-pulse' 
+                      : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
+                  }`}
+                  title="Speak to analyze"
+                >
+                  {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                </button>
+              </div>
 
               <div className="mt-6 flex gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest border-t border-slate-100 pt-6">
                 <div className="flex items-center gap-1">

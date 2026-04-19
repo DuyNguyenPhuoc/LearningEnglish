@@ -27,21 +27,21 @@ export default async function handler(req, res) {
     const $c = cheerio.load(cambridgeHtml);
     const $l = cheerio.load(labanHtml);
 
-    // 1. Phonetics (keep existing logic)
-    const extractPhonetic = (regionClass) => {
-      const regionEl = $c(`.${regionClass}.dpron-i`);
-      const ipa = regionEl.find('.ipa').first().text();
+    // 1. Phonetics (Restricted to main word header)
+    const posHeader = $c('.pos-header').first();
+
+    const extractPhonetic = (regionClass, container) => {
+      const regionEl = container.find(`.${regionClass}.dpron-i`).first();
+      let ipa = regionEl.find('.ipa').first().text();
+      
+      // Sanitization: Remove any extra slashes or whitespace
+      ipa = ipa.replace(/\//g, '').trim();
+      
       let audio = regionEl.find('source[type="audio/mpeg"]').first().attr('src');
       if (audio && !audio.startsWith('http')) audio = `https://dictionary.cambridge.org${audio}`;
+      
       return { text: ipa ? `/${ipa}/` : '', audio };
     };
-
-    const allPhoneticTexts = [];
-    $c('.ipa').each((i, el) => {
-      const text = $c(el).text();
-      if (text) allPhoneticTexts.push(text);
-    });
-    const bestPhonetic = allPhoneticTexts.find(t => t.includes('.')) || allPhoneticTexts[0];
 
     // 2. Multiple Entries (English)
     const entries = [];
@@ -95,8 +95,8 @@ export default async function handler(req, res) {
     const result = {
       word,
       phonetics: {
-        uk: extractPhonetic('uk'),
-        us: extractPhonetic('us')
+        uk: extractPhonetic('uk', posHeader),
+        us: extractPhonetic('us', posHeader)
       },
       definitions: $c('.def.ddef_d').first().text().trim() || 'No definition found.',
       entries,
@@ -106,11 +106,6 @@ export default async function handler(req, res) {
       collocations,
       found: entries.length > 0 || vnEntries.length > 0
     };
-
-    if (bestPhonetic) {
-      if (!result.phonetics.uk.text) result.phonetics.uk.text = `/${bestPhonetic}/`;
-      if (!result.phonetics.us.text.includes('.')) result.phonetics.us.text = `/${bestPhonetic}/`;
-    }
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');

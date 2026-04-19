@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fetchWordDetails, parseTextToWords } from './services/dictionary';
+import { fetchWordDetails, parseTextToWords, CACHE_KEY } from './services/dictionary';
 import WordCard from './components/WordCard';
 
 function App() {
@@ -114,7 +114,7 @@ function App() {
 
   // Load results from cache on mount
   useEffect(() => {
-    const cached = localStorage.getItem('ev-trainer-last-search');
+    const cached = localStorage.getItem(`ev-trainer-last-search-${CACHE_KEY}`);
     if (cached) {
       setResults(JSON.parse(cached));
     }
@@ -134,14 +134,14 @@ function App() {
     }
 
     setResults(wordDetails);
-    localStorage.setItem('ev-trainer-last-search', JSON.stringify(wordDetails));
+    localStorage.setItem(`ev-trainer-last-search-${CACHE_KEY}`, JSON.stringify(wordDetails));
     setIsAnalyzing(false);
   };
 
   const clearAll = () => {
     setResults([]);
     setInputText('');
-    localStorage.removeItem('ev-trainer-last-search');
+    localStorage.removeItem(`ev-trainer-last-search-${CACHE_KEY}`);
   };
 
   return (

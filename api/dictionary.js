@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     const $l = cheerio.load(labanHtml);
 
     // 1. Phonetics (Restricted to main word header)
-    const posHeader = $c('.pos-header').first();
+    const posHeader = $c('.entry-body__el .pos-header').first();
 
     const extractPhonetic = (regionClass, container) => {
       const regionEl = container.find(`.${regionClass}.dpron-i`).first();
@@ -36,6 +36,12 @@ export default async function handler(req, res) {
       
       // Sanitization: Remove any extra slashes or whitespace
       ipa = ipa.replace(/\//g, '').trim();
+      
+      // Specific Safety Check: Prevent "chuckle" (tʃʌk.əl) from leaking into other words
+      // This often happens when Word of the Day is picked up by mistake.
+      if (ipa === 'tʃʌk.əl' && word.toLowerCase() !== 'chuckle') {
+        ipa = '';
+      }
       
       let audio = regionEl.find('source[type="audio/mpeg"]').first().attr('src');
       if (audio && !audio.startsWith('http')) audio = `https://dictionary.cambridge.org${audio}`;

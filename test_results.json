@@ -1,0 +1,1033 @@
+[
+  {
+    "word": "hello",
+    "uk": {
+      "text": "/heˈləʊ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhef/ukheft_029.mp3"
+    },
+    "us": {
+      "text": "/heˈloʊ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/h/hel/hello/hello.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "world",
+    "uk": {
+      "text": "/wɜːld/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukw/ukwor/ukworks006.mp3"
+    },
+    "us": {
+      "text": "/wɝːld/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/w/wor/world/world.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "apple",
+    "uk": {
+      "text": "/ˈæp.əl/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uka/ukapp/ukappen014.mp3"
+    },
+    "us": {
+      "text": "/ˈæp.əl/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/a/app/apple/apple.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "banana",
+    "uk": {
+      "text": "/bəˈnɑː.nə/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukb/ukbal/ukballs018.mp3"
+    },
+    "us": {
+      "text": "/bəˈnæn.ə/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/b/ban/banan/banana.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "cat",
+    "uk": {
+      "text": "/kæt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukc/ukcas/ukcaste011.mp3"
+    },
+    "us": {
+      "text": "/kæt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/c/cat/cat__/cat.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "dog",
+    "uk": {
+      "text": "/dɒɡ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukd/ukdoc/ukdocud022.mp3"
+    },
+    "us": {
+      "text": "/dɑːɡ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/d/dog/dog__/dog.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "elephant",
+    "uk": {
+      "text": "/ˈel.ɪ.fənt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uke/ukele/ukelect016.mp3"
+    },
+    "us": {
+      "text": "/ˈel.ə.fənt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/e/eus/eus75/eus75655.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "fish",
+    "uk": {
+      "text": "/fɪʃ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukf/ukfir/ukfirew013.mp3"
+    },
+    "us": {
+      "text": "/fɪʃ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/f/fis/fish_/fish.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "guitar",
+    "uk": {
+      "text": "/ɡɪˈtɑːr/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukg/ukgui/ukguime006.mp3"
+    },
+    "us": {
+      "text": "/ɡɪˈtɑːr/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/g/gui/guita/guitar.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "house",
+    "uk": {
+      "text": "/haʊs/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhot/ukhotfo023.mp3"
+    },
+    "us": {
+      "text": "/haʊs/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/h/hou/house/house.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "island",
+    "uk": {
+      "text": "/ˈaɪ.lənd/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uki/ukirr/ukirres026.mp3"
+    },
+    "us": {
+      "text": "/ˈaɪ.lənd/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/i/isl/islan/island.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "jungle",
+    "uk": {
+      "text": "/ˈdʒʌŋ.ɡəl/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukj/ukjun/ukjun__006.mp3"
+    },
+    "us": {
+      "text": "/ˈdʒʌŋ.ɡəl/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/j/jun/jungl/jungle.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "kite",
+    "uk": {
+      "text": "/kaɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukk/ukkit/ukkit__004.mp3"
+    },
+    "us": {
+      "text": "/kaɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/k/kit/kite_/kite.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "lemon",
+    "uk": {
+      "text": "/ˈlem.ən/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukl/uklei/ukleisu005.mp3"
+    },
+    "us": {
+      "text": "/ˈlem.ən/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/l/lem/lemon/lemon.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "monkey",
+    "uk": {
+      "text": "/ˈmʌŋ.ki/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukm/ukmon/ukmonk_002.mp3"
+    },
+    "us": {
+      "text": "/ˈmʌŋ.ki/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/e/eus/eus73/eus73071.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "notebook",
+    "uk": {
+      "text": "/ˈnəʊt.bʊk/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukn/uknos/uknosh_018.mp3"
+    },
+    "us": {
+      "text": "/ˈnoʊt.bʊk/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/n/not/noteb/notebook.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "ocean",
+    "uk": {
+      "text": "/ˈəʊ.ʃən/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uko/ukocc/ukoccup008.mp3"
+    },
+    "us": {
+      "text": "/ˈoʊ.ʃən/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/e/eus/eus75/eus75146.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "pencil",
+    "uk": {
+      "text": "/ˈpen.səl/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukpee/ukpeewe023.mp3"
+    },
+    "us": {
+      "text": "/ˈpen.səl/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/e/eus/eus73/eus73475.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "queen",
+    "uk": {
+      "text": "/kwiːn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukq/ukqua/ukquart015.mp3"
+    },
+    "us": {
+      "text": "/kwiːn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/q/que/queen/queen.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "river",
+    "uk": {
+      "text": "/ˈrɪv.ər/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukr/ukrip/ukripof024.mp3"
+    },
+    "us": {
+      "text": "/ˈrɪv.ɚ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/r/riv/river/river.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "sun",
+    "uk": {
+      "text": "/sʌn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/uksom/uksomet012.mp3"
+    },
+    "us": {
+      "text": "/sʌn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/s/son/son__/son.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "tree",
+    "uk": {
+      "text": "/triː/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukt/uktre/uktreac020.mp3"
+    },
+    "us": {
+      "text": "/triː/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/t/tre/tree_/tree.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "umbrella",
+    "uk": {
+      "text": "/ʌmˈbrel.ə/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uku/ukugl/ukuglin029.mp3"
+    },
+    "us": {
+      "text": "/ʌmˈbrel.ə/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/u/umb/umbre/umbrella.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "village",
+    "uk": {
+      "text": "/ˈvɪl.ɪdʒ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukv/ukvig/ukvigil018.mp3"
+    },
+    "us": {
+      "text": "/ˈvɪl.ɪdʒ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/v/vil/villa/village.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "water",
+    "uk": {
+      "text": "/ˈwɔː.tər/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukw/ukwas/ukwaspi026.mp3"
+    },
+    "us": {
+      "text": "/ˈwɑː.t̬ɚ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/u/usc/uscld/uscld2s094.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "xylophone",
+    "uk": {
+      "text": "/ˈzaɪ.lə.fəʊn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukx/ukxra/ukxray_004.mp3"
+    },
+    "us": {
+      "text": "/ˈzaɪ.lə.foʊn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/x/xyl/xylop/xylophone.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "yellow",
+    "uk": {
+      "text": "/ˈjel.əʊ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uky/ukyd_/ukyd___013.mp3"
+    },
+    "us": {
+      "text": "/ˈjel.oʊ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/y/yel/yello/yellow.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "zebra",
+    "uk": {
+      "text": "/ˈzeb.rə/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukz/ukzea/ukzealo003.mp3"
+    },
+    "us": {
+      "text": "/ˈziː.brə/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/z/zeb/zebra/zebra.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "airplane",
+    "uk": {
+      "text": "/ˈeə.pleɪn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uka/ukair/ukairfi015.mp3"
+    },
+    "us": {
+      "text": "/ˈer.pleɪn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/u/usa/usair/usairfa012.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "boat",
+    "uk": {
+      "text": "/bəʊt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukb/ukboa/ukboat_001.mp3"
+    },
+    "us": {
+      "text": "/boʊt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/b/boa/boat_/boat.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "car",
+    "uk": {
+      "text": "/kɑːr/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukc/ukcap/ukcapit027.mp3"
+    },
+    "us": {
+      "text": "/kɑːr/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/c/car/car__/car.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "desk",
+    "uk": {
+      "text": "/desk/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukd/ukdes/ukdesir006.mp3"
+    },
+    "us": {
+      "text": "/desk/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/d/des/desk_/desk.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "egg",
+    "uk": {
+      "text": "/eɡ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uke/ukeff/ukeffor009.mp3"
+    },
+    "us": {
+      "text": "/eɡ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/e/egg/egg__/egg.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "flower",
+    "uk": {
+      "text": "/flaʊər/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukf/ukflo/ukflori022.mp3"
+    },
+    "us": {
+      "text": "/ˈflaʊ.ɚ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/f/flo/flowe/flower.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "glass",
+    "uk": {
+      "text": "/ɡlɑːs/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukg/ukgla/ukglaci030.mp3"
+    },
+    "us": {
+      "text": "/ɡlæs/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/g/gla/glass/glass.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "hat",
+    "uk": {
+      "text": "/hæt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhas/ukhasty002.mp3"
+    },
+    "us": {
+      "text": "/hæt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/h/hat/hat__/hat.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "ice",
+    "uk": {
+      "text": "/aɪs/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhyp/ukhypot015.mp3"
+    },
+    "us": {
+      "text": "/aɪs/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/i/ice/ice__/ice.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "juice",
+    "uk": {
+      "text": "/dʒuːs/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukj/ukjud/ukjudic014.mp3"
+    },
+    "us": {
+      "text": "/dʒuːs/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/j/jui/juice/juice.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "key",
+    "uk": {
+      "text": "/kiː/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukk/ukker/ukkero_008.mp3"
+    },
+    "us": {
+      "text": "/kiː/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/k/key/key__/key.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "lamp",
+    "uk": {
+      "text": "/læmp/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukl/uklai/uklaidb030.mp3"
+    },
+    "us": {
+      "text": "/læmp/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/l/lam/lamp_/lamp.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "mouse",
+    "uk": {
+      "text": "/maʊs/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukm/ukmou/ukmourn002.mp3"
+    },
+    "us": {
+      "text": "/maʊs/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/m/mou/mouse/mouse.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "nose",
+    "uk": {
+      "text": "/nəʊz/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukn/uknoc/uknoctu011.mp3"
+    },
+    "us": {
+      "text": "/noʊz/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/n/noe/noes_/noes.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "orange",
+    "uk": {
+      "text": "/ˈɒr.ɪndʒ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uko/ukora/ukorang001.mp3"
+    },
+    "us": {
+      "text": "/ˈɔːr.ɪndʒ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/e/eus/eus75/eus75268.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "paper",
+    "uk": {
+      "text": "/ˈpeɪ.pər/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukpan/ukpanor026.mp3"
+    },
+    "us": {
+      "text": "/ˈpeɪ.pɚ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/p/pap/paper/paper.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "quilt",
+    "uk": {
+      "text": "/kwɪlt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukq/ukqui/ukquibb023.mp3"
+    },
+    "us": {
+      "text": "/kwɪlt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/q/qui/quilt/quilt.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "rabbit",
+    "uk": {
+      "text": "/ˈræb.ɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukr/ukrab/ukrabbi001.mp3"
+    },
+    "us": {
+      "text": "/ˈræb.ɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/r/rab/rabbi/rabbit.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "shoe",
+    "uk": {
+      "text": "/ʃuː/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/uksho/ukshodd004.mp3"
+    },
+    "us": {
+      "text": "/ʃuː/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/s/sho/shoe_/shoe.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "table",
+    "uk": {
+      "text": "/ˈteɪ.bəl/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/uksyn/uksynta027.mp3"
+    },
+    "us": {
+      "text": "/ˈteɪ.bəl/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/t/tab/table/table.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "unicorn",
+    "uk": {
+      "text": "/ˈjuː.nɪ.kɔːn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uku/ukunh/ukunhea007.mp3"
+    },
+    "us": {
+      "text": "/ˈjuː.nɪ.kɔːrn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/u/uni/unico/unicorn.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "violin",
+    "uk": {
+      "text": "/ˌvaɪəˈlɪn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukv/ukvin/ukvineg016.mp3"
+    },
+    "us": {
+      "text": "/ˌvaɪ.əˈlɪn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/v/vio/violi/violin.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "window",
+    "uk": {
+      "text": "/ˈwɪn.dəʊ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukw/ukwin/ukwinde007.mp3"
+    },
+    "us": {
+      "text": "/ˈwɪn.doʊ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/w/win/windo/window.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "yarn",
+    "uk": {
+      "text": "/jɑːn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukx/ukxra/ukxray_027.mp3"
+    },
+    "us": {
+      "text": "/jɑːrn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/y/yar/yarn_/yarn.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "door",
+    "uk": {
+      "text": "/dɔːr/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukd/ukdon/ukdonke014.mp3"
+    },
+    "us": {
+      "text": "/dɔːr/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/d/doo/door_/door.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "bed",
+    "uk": {
+      "text": "/bed/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukb/ukbea/ukbeau_026.mp3"
+    },
+    "us": {
+      "text": "/bed/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/b/bed/bed__/bed.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "chair",
+    "uk": {
+      "text": "/tʃeər/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukc/ukcey/ukceylo014.mp3"
+    },
+    "us": {
+      "text": "/tʃer/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/c/cha/chair/chair.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "cup",
+    "uk": {
+      "text": "/kʌp/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukc/ukcun/ukcunt_002.mp3"
+    },
+    "us": {
+      "text": "/kʌp/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/c/cup/cup__/cup.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "plate",
+    "uk": {
+      "text": "/pleɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukpla/ukplate001.mp3"
+    },
+    "us": {
+      "text": "/pleɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/p/pla/plate/plate.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "fork",
+    "uk": {
+      "text": "/fɔːk/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukf/ukfor/ukforgi012.mp3"
+    },
+    "us": {
+      "text": "/fɔːrk/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/f/for/fork_/fork.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "spoon",
+    "uk": {
+      "text": "/spuːn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/ukspo/ukspong011.mp3"
+    },
+    "us": {
+      "text": "/spuːn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/s/spo/spoon/spoon.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "knife",
+    "uk": {
+      "text": "/naɪf/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukk/ukkne/ukkneel011.mp3"
+    },
+    "us": {
+      "text": "/naɪf/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/k/kni/knife/knife.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "computer",
+    "uk": {
+      "text": "/kəmˈpjuː.tər/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukc/ukcom/ukcompr014.mp3"
+    },
+    "us": {
+      "text": "/kəmˈpjuː.t̬ɚ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/c/com/compu/computer.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "phone",
+    "uk": {
+      "text": "/fəʊn/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukphe/ukpheno029.mp3"
+    },
+    "us": {
+      "text": "/foʊn/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/p/pho/phone/phone.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "book",
+    "uk": {
+      "text": "/bʊk/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukb/ukbon/ukbonfi028.mp3"
+    },
+    "us": {
+      "text": "/bʊk/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/b/boo/book_/book.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "pen",
+    "uk": {
+      "text": "/pen/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukpee/ukpeewe016.mp3"
+    },
+    "us": {
+      "text": "/pen/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/p/pen/pen__/pen.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "clock",
+    "uk": {
+      "text": "/klɒk/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukc/ukcli/ukclipp014.mp3"
+    },
+    "us": {
+      "text": "/klɑːk/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/c/clo/clock/clock.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "picture",
+    "uk": {
+      "text": "/ˈpɪk.tʃər/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukpia/ukpiano028.mp3"
+    },
+    "us": {
+      "text": "/ˈpɪk.tʃɚ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/p/pic/pictu/picture.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "bag",
+    "uk": {
+      "text": "/bæɡ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukb/ukbag/ukbag__001.mp3"
+    },
+    "us": {
+      "text": "/bæɡ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/b/bag/bag__/bag.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "shoe",
+    "uk": {
+      "text": "/ʃuː/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/uksho/ukshodd004.mp3"
+    },
+    "us": {
+      "text": "/ʃuː/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/s/sho/shoe_/shoe.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "sock",
+    "uk": {
+      "text": "/sɒk/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/uksob/uksober023.mp3"
+    },
+    "us": {
+      "text": "/sɑːk/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/s/soc/sock_/sock.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "shirt",
+    "uk": {
+      "text": "/ʃɜːt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/ukshi/ukshine028.mp3"
+    },
+    "us": {
+      "text": "/ʃɝːt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/s/shi/shirt/shirt.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "pants",
+    "uk": {
+      "text": "/pænts/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukpan/ukpanor016.mp3"
+    },
+    "us": {
+      "text": "/pænts/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/p/pan/pants/pants.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "coat",
+    "uk": {
+      "text": "/kəʊt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukc/ukclu/ukclutc028.mp3"
+    },
+    "us": {
+      "text": "/koʊt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/c/coa/coat_/coat.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "hat",
+    "uk": {
+      "text": "/hæt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukh/ukhas/ukhasty002.mp3"
+    },
+    "us": {
+      "text": "/hæt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/h/hat/hat__/hat.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "glove",
+    "uk": {
+      "text": "/ɡlʌv/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukg/ukglo/ukglori011.mp3"
+    },
+    "us": {
+      "text": "/ɡlʌv/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/g/glo/glove/glove.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "scarf",
+    "uk": {
+      "text": "/skɑːf/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/uks/uksca/ukscamp026.mp3"
+    },
+    "us": {
+      "text": "/skɑːrf/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/s/sca/scarf/scarf.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "ring",
+    "uk": {
+      "text": "/rɪŋ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukr/ukrig/ukrigor009.mp3"
+    },
+    "us": {
+      "text": "/rɪŋ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/r/rin/ring_/ring.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "watch",
+    "uk": {
+      "text": "/wɒtʃ/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukw/ukwas/ukwaspi014.mp3"
+    },
+    "us": {
+      "text": "/wɑːtʃ/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/w/wat/watch/watch.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "glasses",
+    "uk": {
+      "text": ""
+    },
+    "us": {
+      "text": "/ˈɡlæs·əz/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/g/gla/glass/glasses.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "wallet",
+    "uk": {
+      "text": "/ˈwɒl.ɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukw/ukwal/ukwalla004.mp3"
+    },
+    "us": {
+      "text": "/ˈwɑː.lɪt/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/e/eus/eus74/eus74916.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "purse",
+    "uk": {
+      "text": "/pɜːs/",
+      "audio": "https://dictionary.cambridge.org/media/english/uk_pron/u/ukp/ukpur/ukpurit018.mp3"
+    },
+    "us": {
+      "text": "/pɝːs/",
+      "audio": "https://dictionary.cambridge.org/media/english/us_pron/p/pur/purse/purse.mp3"
+    },
+    "hasPosHeader": true
+  },
+  {
+    "word": "nonexistentword123",
+    "uk": {
+      "text": "",
+      "audio": ""
+    },
+    "us": {
+      "text": "",
+      "audio": ""
+    },
+    "hasPosHeader": false
+  },
+  {
+    "word": "chuckkle",
+    "uk": {
+      "text": "",
+      "audio": ""
+    },
+    "us": {
+      "text": "",
+      "audio": ""
+    },
+    "hasPosHeader": false
+  },
+  {
+    "word": "helloooo",
+    "uk": {
+      "text": "",
+      "audio": ""
+    },
+    "us": {
+      "text": "",
+      "audio": ""
+    },
+    "hasPosHeader": false
+  },
+  {
+    "word": "scrappper",
+    "uk": {
+      "text": "",
+      "audio": ""
+    },
+    "us": {
+      "text": "",
+      "audio": ""
+    },
+    "hasPosHeader": false
+  },
+  {
+    "word": "geminiii",
+    "uk": {
+      "text": "",
+      "audio": ""
+    },
+    "us": {
+      "text": "",
+      "audio": ""
+    },
+    "hasPosHeader": false
+  },
+  {
+    "word": "antigravityyy",
+    "uk": {
+      "text": "",
+      "audio": ""
+    },
+    "us": {
+      "text": "",
+      "audio": ""
+    },
+    "hasPosHeader": false
+  }
+]

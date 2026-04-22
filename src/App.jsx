@@ -14,7 +14,16 @@ function App() {
   const [isListening, setIsListening] = useState(false);
 
   // Speech Recognition Logic
-  const startListening = () => {
+  const toggleListening = () => {
+    if (isListening) {
+      if (window._recognition) {
+        try { window._recognition.stop(); } catch(e) {}
+        window._recognition = null;
+      }
+      setIsListening(false);
+      return;
+    }
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Trình duyệt của bạn không hỗ trợ nhận diện giọng nói. Vui lòng sử dụng Chrome hoặc Edge.");
@@ -30,7 +39,7 @@ function App() {
     window._recognition = recognition; // Prevent garbage collection
     
     recognition.lang = 'en-US';
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
 
     recognition.onstart = () => setIsListening(true);
@@ -40,7 +49,8 @@ function App() {
     };
     
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+      const lastIdx = event.results.length - 1;
+      const transcript = event.results[lastIdx][0].transcript;
       setInputText(prev => prev ? `${prev} ${transcript}` : transcript);
       // Auto-trigger analysis
       setTimeout(() => {
@@ -215,14 +225,13 @@ function App() {
                 </button>
 
                 <button
-                  onClick={startListening}
-                  disabled={isListening}
+                  onClick={toggleListening}
                   className={`p-4 rounded-2xl flex items-center justify-center transition-all ${
                     isListening 
                       ? 'bg-red-100 text-red-600 animate-pulse' 
                       : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
                   }`}
-                  title="Speak to analyze"
+                  title={isListening ? "Click to stop listening" : "Speak to analyze"}
                 >
                   {isListening ? <MicOff size={20} /> : <Mic size={20} />}
                 </button>

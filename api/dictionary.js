@@ -21,7 +21,11 @@ export default async function handler(req, res) {
       })
     ]);
 
-    const cambridgeHtml = cambridgeRes.ok ? await cambridgeRes.text() : '';
+    const isCambridgeValid = cambridgeRes.ok && 
+                             !cambridgeRes.url.endsWith('/dictionary/english/') &&
+                             !cambridgeRes.url.includes('/spellcheck/');
+
+    const cambridgeHtml = isCambridgeValid ? await cambridgeRes.text() : '';
     const labanHtml = labanRes.ok ? await labanRes.text() : '';
 
     const $c = cheerio.load(cambridgeHtml);
@@ -31,17 +35,13 @@ export default async function handler(req, res) {
     const posHeader = $c('.entry-body__el .pos-header').first();
 
     const extractPhonetic = (regionClass, container) => {
+      if (!isCambridgeValid || !container.length) return { text: '', audio: '' };
+      
       const regionEl = container.find(`.${regionClass}.dpron-i`).first();
       let ipa = regionEl.find('.ipa').first().text();
       
       // Sanitization: Remove any extra slashes or whitespace
       ipa = ipa.replace(/\//g, '').trim();
-      
-      // Specific Safety Check: Prevent "chuckle" (tʃʌk.əl) from leaking into other words
-      // This often happens when Word of the Day is picked up by mistake.
-      if (ipa === 'tʃʌk.əl' && word.toLowerCase() !== 'chuckle') {
-        ipa = '';
-      }
       
       let audio = regionEl.find('source[type="audio/mpeg"]').first().attr('src');
       if (audio && !audio.startsWith('http')) audio = `https://dictionary.cambridge.org${audio}`;

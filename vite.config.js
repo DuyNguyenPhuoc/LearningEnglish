@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import handler from './api/dictionary.js'
+import dictionaryHandler from './api/dictionary.js'
+import lessonsHandler from './api/lessons.js'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,15 +11,11 @@ export default defineConfig({
       name: 'vercel-api-emulator',
       configureServer(server) {
         server.middlewares.use(async (req, res, next) => {
-          // Emulate Vercel's /api/dictionary?word=xxx
-          if (req.url.startsWith('/api/dictionary')) {
+          // Emulate Vercel's API
+          if (req.url.startsWith('/api/')) {
             const url = new URL(req.url, `http://${req.headers.host}`);
-            const word = url.searchParams.get('word') || url.pathname.split('/').pop();
             
-            // Mock the Vercel req.query
-            req.query = { word: decodeURIComponent(word) };
-            
-            // Mock res.status and res.json for the serverless handler
+            // Mock res methods
             res.status = (code) => { res.statusCode = code; return res; };
             res.json = (data) => {
               res.setHeader('Content-Type', 'application/json');
@@ -31,13 +28,24 @@ export default defineConfig({
             };
 
             try {
-              await handler(req, res);
+              if (req.url.startsWith('/api/dictionary')) {
+                const word = url.searchParams.get('word') || url.pathname.split('/').pop();
+                req.query = { word: decodeURIComponent(word) };
+                await dictionaryHandler(req, res);
+                return;
+              }
+              
+              if (req.url.startsWith('/api/lessons')) {
+                // parse query string into req.query
+                req.query = Object.fromEntries(url.searchParams);
+                await lessonsHandler(req, res);
+                return;
+              }
             } catch (err) {
               console.error('Local API Error:', err);
               res.statusCode = 500;
               res.end(JSON.stringify({ error: 'Internal Server Error' }));
             }
-            return;
           }
           next();
         });

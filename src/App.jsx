@@ -3,6 +3,8 @@ import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, 
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchWordDetails, parseTextToWords, CACHE_KEY } from './services/dictionary';
 import WordCard from './components/WordCard';
+import LessonsView from './components/LessonsView';
+import LessonModal from './components/LessonModal';
 
 function App() {
   const [inputText, setInputText] = useState('');
@@ -12,6 +14,11 @@ function App() {
   const [playingIndex, setPlayingIndex] = useState(-1);
   const [playingAccent, setPlayingAccent] = useState(null); // 'uk' or 'us'
   const [isListening, setIsListening] = useState(false);
+
+  // Lessons State
+  const [lessons, setLessons] = useState([]);
+  const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
+  const [editingLesson, setEditingLesson] = useState(null);
 
   // Speech Recognition Logic
   const toggleListening = () => {
@@ -128,7 +135,66 @@ function App() {
     if (cached) {
       setResults(JSON.parse(cached));
     }
+    
+    // Fetch lessons from the source code API
+    fetch('/api/lessons')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setLessons(data);
+        }
+      })
+      .catch(err => console.error("Failed to load lessons:", err));
   }, []);
+
+  // Lessons Handlers
+  const handleSaveLesson = async (lessonData) => {
+    try {
+      const method = editingLesson ? 'PUT' : 'POST';
+      const res = await fetch('/api/lessons', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lessonData)
+      });
+      if (!res.ok) throw new Error('Failed to save lesson');
+      
+      let updatedLessons;
+      if (editingLesson) {
+        updatedLessons = lessons.map(l => l.id === lessonData.id ? lessonData : l);
+      } else {
+        updatedLessons = [lessonData, ...lessons];
+      }
+      setLessons(updatedLessons);
+      setIsLessonModalOpen(false);
+      setEditingLesson(null);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save lesson to source code.');
+    }
+  };
+
+  const handleDeleteLesson = async (id) => {
+    if (window.confirm('Are you sure you want to delete this lesson?')) {
+      try {
+        const res = await fetch(`/api/lessons?id=${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Failed to delete lesson');
+        
+        const updatedLessons = lessons.filter(l => l.id !== id);
+        setLessons(updatedLessons);
+      } catch (err) {
+        console.error(err);
+        alert('Failed to delete lesson from source code.');
+      }
+    }
+  };
+
+  const handleStudyLesson = (lesson) => {
+    setInputText(lesson.vocabulary);
+    setActiveTab('vocabulary');
+    setTimeout(() => {
+      document.getElementById('analyze-btn')?.click();
+    }, 100);
+  };
 
   const handleAnalyze = async () => {
     if (!inputText.trim()) return;
@@ -176,6 +242,12 @@ function App() {
             >
               Vocabulary Analyzer
             </button>
+            <button 
+              onClick={() => setActiveTab('lessons')}
+              className={`text-sm font-semibold transition-colors ${activeTab === 'lessons' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              My Lessons
+            </button>
             <div className="h-4 w-px bg-slate-200"></div>
             <a href="https://github.com" target="_blank" className="text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors">Documentation</a>
           </nav>
@@ -183,139 +255,162 @@ function App() {
       </header>
 
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Left Column: Input */}
-          <section className="lg:col-span-5 flex flex-col gap-6">
-            <div className="glass-card p-6 rounded-3xl sticky top-28">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-slate-800">
-                  <Sparkles size={20} className="text-primary-500" />
-                  <h2 className="font-bold">Input Text</h2>
+        {activeTab === 'vocabulary' ? (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Left Column: Input */}
+            <section className="lg:col-span-5 flex flex-col gap-6">
+              <div className="glass-card p-6 rounded-3xl sticky top-28">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2 text-slate-800">
+                    <Sparkles size={20} className="text-primary-500" />
+                    <h2 className="font-bold">Input Text</h2>
+                  </div>
+                  <button 
+                     onClick={clearAll}
+                     className="text-xs font-semibold text-slate-400 hover:text-red-500 flex items-center gap-1 transition-colors"
+                  >
+                    <Trash2 size={14} />
+                    Clear
+                  </button>
                 </div>
-                <button 
-                   onClick={clearAll}
-                   className="text-xs font-semibold text-slate-400 hover:text-red-500 flex items-center gap-1 transition-colors"
-                >
-                  <Trash2 size={14} />
-                  Clear
-                </button>
-              </div>
 
-              <textarea 
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                placeholder="Paste English text, a list of words, or a sentence here..."
-                className="w-full h-64 bg-slate-50/50 border border-slate-200 rounded-2xl p-4 text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-primary-500 transition-all resize-none mb-4"
-              />
+                <textarea 
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder="Paste English text, a list of words, or a sentence here..."
+                  className="w-full h-64 bg-slate-50/50 border border-slate-200 rounded-2xl p-4 text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-primary-500 transition-all resize-none mb-4"
+                />
 
-              <div className="flex gap-2 mb-4">
-                <button 
-                  onClick={handleAnalyze}
-                  id="analyze-btn"
-                  disabled={isAnalyzing || !inputText.trim()}
-                  className="btn-primary flex-1 flex items-center justify-center gap-2 group"
-                >
-                  {isAnalyzing ? (
-                    <Loader2 size={20} className="animate-spin" />
-                  ) : (
-                    <Search size={20} className="group-hover:scale-110 transition-transform" />
-                  )}
-                  {isAnalyzing ? 'Analyzing...' : 'Analyze Vocabulary'}
-                </button>
+                <div className="flex gap-2 mb-4">
+                  <button 
+                    onClick={handleAnalyze}
+                    id="analyze-btn"
+                    disabled={isAnalyzing || !inputText.trim()}
+                    className="btn-primary flex-1 flex items-center justify-center gap-2 group"
+                  >
+                    {isAnalyzing ? (
+                      <Loader2 size={20} className="animate-spin" />
+                    ) : (
+                      <Search size={20} className="group-hover:scale-110 transition-transform" />
+                    )}
+                    {isAnalyzing ? 'Analyzing...' : 'Analyze Vocabulary'}
+                  </button>
 
-                <button
-                  onClick={toggleListening}
-                  className={`p-4 rounded-2xl flex items-center justify-center transition-all ${
-                    isListening 
-                      ? 'bg-red-100 text-red-600 animate-pulse' 
-                      : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
-                  }`}
-                  title={isListening ? "Click to stop listening" : "Speak to analyze"}
-                >
-                  {isListening ? <MicOff size={20} /> : <Mic size={20} />}
-                </button>
-              </div>
-
-              <div className="mt-6 flex gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest border-t border-slate-100 pt-6">
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  Automatic Parsing
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  Audio Pronunciation
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Right Column: Results */}
-          <section className="lg:col-span-7 flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-slate-800">
-                <ListFilter size={20} className="text-primary-500" />
-                <h2 className="font-bold">Analysis Results ({results.length})</h2>
-              </div>
-              
-              {results.length > 0 && (
-                <div className="flex items-center gap-2">
                   <button
-                    onClick={() => playingAccent === 'uk' ? stopPlayback() : startPlaybackAll('uk')}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                      playingAccent === 'uk' 
-                        ? 'bg-red-50 text-red-600 hover:bg-red-100' 
+                    onClick={toggleListening}
+                    className={`p-4 rounded-2xl flex items-center justify-center transition-all ${
+                      isListening 
+                        ? 'bg-red-100 text-red-600 animate-pulse' 
                         : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
                     }`}
+                    title={isListening ? "Click to stop listening" : "Speak to analyze"}
                   >
-                    <Volume2 size={18} className={playingAccent === 'uk' ? 'animate-pulse' : ''} />
-                    {playingAccent === 'uk' ? 'Stop' : 'Listen UK'}
-                  </button>
-                  
-                  <button
-                    onClick={() => playingAccent === 'us' ? stopPlayback() : startPlaybackAll('us')}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                      playingAccent === 'us' 
-                        ? 'bg-red-50 text-red-600 hover:bg-red-100' 
-                        : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
-                    }`}
-                  >
-                    <Volume2 size={18} className={playingAccent === 'us' ? 'animate-pulse' : ''} />
-                    {playingAccent === 'us' ? 'Stop' : 'Listen US'}
+                    {isListening ? <MicOff size={20} /> : <Mic size={20} />}
                   </button>
                 </div>
-              )}
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <AnimatePresence mode="popLayout">
-                {results.length > 0 ? (
-                  results.map((item, idx) => (
-                    <WordCard 
-                      key={`${item.word}-${idx}`} 
-                      item={item} 
-                      isActive={playingIndex === idx}
-                    />
-                  ))
-                ) : (
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="col-span-full h-80 flex flex-col items-center justify-center text-center opacity-40 grayscale"
-                  >
-                    <div className="w-24 h-24 bg-slate-200 rounded-full flex items-center justify-center mb-4">
-                      <Search size={40} className="text-slate-400" />
-                    </div>
-                    <p className="text-slate-500 font-medium">No words analyzed yet.</p>
-                    <p className="text-xs text-slate-400 max-w-xs mt-1">Start by pasting some text into the analyzer on the left.</p>
-                  </motion.div>
+                <div className="mt-6 flex gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest border-t border-slate-100 pt-6">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    Automatic Parsing
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                    Audio Pronunciation
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Right Column: Results */}
+            <section className="lg:col-span-7 flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-slate-800">
+                  <ListFilter size={20} className="text-primary-500" />
+                  <h2 className="font-bold">Analysis Results ({results.length})</h2>
+                </div>
+                
+                {results.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => playingAccent === 'uk' ? stopPlayback() : startPlaybackAll('uk')}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                        playingAccent === 'uk' 
+                          ? 'bg-red-50 text-red-600 hover:bg-red-100' 
+                          : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
+                      }`}
+                    >
+                      <Volume2 size={18} className={playingAccent === 'uk' ? 'animate-pulse' : ''} />
+                      {playingAccent === 'uk' ? 'Stop' : 'Listen UK'}
+                    </button>
+                    
+                    <button
+                      onClick={() => playingAccent === 'us' ? stopPlayback() : startPlaybackAll('us')}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                        playingAccent === 'us' 
+                          ? 'bg-red-50 text-red-600 hover:bg-red-100' 
+                          : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
+                      }`}
+                    >
+                      <Volume2 size={18} className={playingAccent === 'us' ? 'animate-pulse' : ''} />
+                      {playingAccent === 'us' ? 'Stop' : 'Listen US'}
+                    </button>
+                  </div>
                 )}
-              </AnimatePresence>
-            </div>
-          </section>
+              </div>
 
-        </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <AnimatePresence mode="popLayout">
+                  {results.length > 0 ? (
+                    results.map((item, idx) => (
+                      <WordCard 
+                        key={`${item.word}-${idx}`} 
+                        item={item} 
+                        isActive={playingIndex === idx}
+                      />
+                    ))
+                  ) : (
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="col-span-full h-80 flex flex-col items-center justify-center text-center opacity-40 grayscale"
+                    >
+                      <div className="w-24 h-24 bg-slate-200 rounded-full flex items-center justify-center mb-4">
+                        <Search size={40} className="text-slate-400" />
+                      </div>
+                      <p className="text-slate-500 font-medium">No words analyzed yet.</p>
+                      <p className="text-xs text-slate-400 max-w-xs mt-1">Start by pasting some text into the analyzer on the left.</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </section>
+
+          </div>
+        ) : (
+          <LessonsView 
+            lessons={lessons}
+            onAdd={() => {
+              setEditingLesson(null);
+              setIsLessonModalOpen(true);
+            }}
+            onEdit={(lesson) => {
+              setEditingLesson(lesson);
+              setIsLessonModalOpen(true);
+            }}
+            onDelete={handleDeleteLesson}
+            onStudy={handleStudyLesson}
+          />
+        )}
       </main>
+
+      <LessonModal 
+        isOpen={isLessonModalOpen}
+        onClose={() => setIsLessonModalOpen(false)}
+        onSave={handleSaveLesson}
+        editingLesson={editingLesson}
+      />
 
       {/* Footer */}
       <footer className="mt-auto py-8 border-t border-slate-200 bg-white">

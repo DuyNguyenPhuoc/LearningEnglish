@@ -5,6 +5,7 @@ import { fetchWordDetails, parseTextToWords, CACHE_KEY } from './services/dictio
 import WordCard from './components/WordCard';
 import LessonsView from './components/LessonsView';
 import LessonModal from './components/LessonModal';
+import IpaView from './components/IpaView';
 
 function App() {
   const [inputText, setInputText] = useState('');
@@ -19,6 +20,24 @@ function App() {
   const [lessons, setLessons] = useState([]);
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState(null);
+
+  // IPA State
+  const [selectedPhonemeSymbol, setSelectedPhonemeSymbol] = useState(null);
+
+  // Cross-tab handlers
+  const handleSearchWord = (word) => {
+    setInputText(word);
+    setActiveTab('vocabulary');
+    // We need to wait for the tab to switch and the DOM to be ready
+    setTimeout(() => {
+      handleAnalyze();
+    }, 100);
+  };
+
+  const handleSelectPhoneme = (symbol) => {
+    setSelectedPhonemeSymbol(symbol);
+    setActiveTab('ipa');
+  };
 
   // Speech Recognition Logic
   const toggleListening = () => {
@@ -243,6 +262,12 @@ function App() {
               Vocabulary Analyzer
             </button>
             <button 
+              onClick={() => setActiveTab('ipa')}
+              className={`text-sm font-semibold transition-colors ${activeTab === 'ipa' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              44 IPA Chart
+            </button>
+            <button 
               onClick={() => setActiveTab('lessons')}
               className={`text-sm font-semibold transition-colors ${activeTab === 'lessons' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-800'}`}
             >
@@ -368,6 +393,7 @@ function App() {
                         key={`${item.word}-${idx}`} 
                         item={item} 
                         isActive={playingIndex === idx}
+                        onSelectPhoneme={handleSelectPhoneme}
                       />
                     ))
                   ) : (
@@ -388,6 +414,13 @@ function App() {
             </section>
 
           </div>
+        ) : activeTab === 'ipa' ? (
+          <IpaView 
+            selectedSymbol={selectedPhonemeSymbol} 
+            onSelectSymbol={setSelectedPhonemeSymbol}
+            onSearchWord={handleSearchWord}
+            currentResults={results}
+          />
         ) : (
           <LessonsView 
             lessons={lessons}

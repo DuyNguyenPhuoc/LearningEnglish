@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dictionaryHandler from './api/dictionary.js'
 import lessonsHandler from './api/lessons.js'
+import ipaProxyHandler from './api/ipa_proxy.js'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -39,6 +40,12 @@ export default defineConfig({
                 // parse query string into req.query
                 req.query = Object.fromEntries(url.searchParams);
                 await lessonsHandler(req, res);
+                return;
+              }
+
+              if (req.url.startsWith('/api/ipa-proxy')) {
+                req.query = Object.fromEntries(url.searchParams);
+                await ipaProxyHandler(req, res);
                 return;
               }
             } catch (err) {

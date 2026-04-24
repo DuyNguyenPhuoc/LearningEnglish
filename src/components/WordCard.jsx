@@ -75,6 +75,57 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
     return narrative;
   };
 
+  const renderClickableIpa = (ipaString) => {
+    if (!ipaString) return <span>/.../</span>;
+    
+    // List of all symbols we support (sorted by length desc to match longer ones like tʃ first)
+    const supportedSymbols = Object.keys(phoneticsVN).sort((a, b) => b.length - a.length);
+    const symbols = [];
+    let i = 0;
+    
+    // Strip slashes for parsing but we'll add them back in the UI
+    const cleanIPA = ipaString.replace(/[\/]/g, '');
+    
+    while (i < cleanIPA.length) {
+      let matched = false;
+      for (const symbol of supportedSymbols) {
+        if (cleanIPA.slice(i, i + symbol.length) === symbol) {
+          symbols.push({ text: symbol, isPhoneme: true });
+          i += symbol.length;
+          matched = true;
+          break;
+        }
+      }
+      
+      if (!matched) {
+        // If it's a stress mark or dot, just add as plain text
+        symbols.push({ text: cleanIPA[i], isPhoneme: false });
+        i++;
+      }
+    }
+    
+    return (
+      <span className="flex items-center">
+        /
+        {symbols.map((s, idx) => (
+          s.isPhoneme ? (
+            <button
+              key={idx}
+              onClick={() => onSelectPhoneme(s.text)}
+              className="hover:text-primary-600 hover:bg-primary-50 rounded px-0.5 transition-colors cursor-pointer"
+              title={`View detail for /${s.text}/`}
+            >
+              {s.text}
+            </button>
+          ) : (
+            <span key={idx} className="opacity-40">{s.text}</span>
+          )
+        ))}
+        /
+      </span>
+    );
+  };
+
   if (!item.found) {
     return (
       <motion.div 
@@ -145,7 +196,9 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
                 <span className={`text-[9px] font-black px-1 rounded ${acc === 'uk' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
                   {acc.toUpperCase()}
                 </span>
-                <span className="text-xs font-semibold text-slate-600 font-mono">{data.text || '/.../'}</span>
+                <span className="text-xs font-semibold text-slate-600 font-mono">
+                  {renderClickableIpa(data.text)}
+                </span>
                 <button 
                   onClick={() => playAudio(data.audio)}
                   disabled={!data.audio}

@@ -175,7 +175,11 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(lessonData)
       });
-      if (!res.ok) throw new Error('Failed to save lesson');
+      
+      if (!res.ok) {
+        const errorText = await res.text().catch(() => 'Unknown error');
+        throw new Error(`Server returned ${res.status}: ${errorText}`);
+      }
       
       let updatedLessons;
       if (editingLesson) {
@@ -187,8 +191,8 @@ function App() {
       setIsLessonModalOpen(false);
       setEditingLesson(null);
     } catch (err) {
-      console.error(err);
-      alert('Failed to save lesson to source code.');
+      console.error('Save lesson error:', err);
+      alert(`Failed to save lesson to source code.\n\nReason: ${err.message}\n\nMake sure you are running the app via "npm run dev" and not just opening the HTML file directly.`);
     }
   };
 
@@ -196,13 +200,16 @@ function App() {
     if (window.confirm('Are you sure you want to delete this lesson?')) {
       try {
         const res = await fetch(`/api/lessons?id=${id}`, { method: 'DELETE' });
-        if (!res.ok) throw new Error('Failed to delete lesson');
+        if (!res.ok) {
+          const errorText = await res.text().catch(() => 'Unknown error');
+          throw new Error(`Server returned ${res.status}: ${errorText}`);
+        }
         
         const updatedLessons = lessons.filter(l => l.id !== id);
         setLessons(updatedLessons);
       } catch (err) {
-        console.error(err);
-        alert('Failed to delete lesson from source code.');
+        console.error('Delete lesson error:', err);
+        alert(`Failed to delete lesson from source code.\n\nReason: ${err.message}\n\nMake sure you are running the app via "npm run dev".`);
       }
     }
   };

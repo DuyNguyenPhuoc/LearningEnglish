@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, MicOff } from 'lucide-react';
+import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, MicOff, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchWordDetails, parseTextToWords, CACHE_KEY } from './services/dictionary';
 import WordCard from './components/WordCard';
@@ -247,17 +247,17 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-slate-50 flex flex-col pb-16 md:pb-0">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-200">
-              <BookOpen size={24} />
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 h-14 sm:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-200">
+              <BookOpen size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">English Vocabulary Trainer</h1>
-              <p className="text-xs text-slate-500 font-medium">Analyze & Master Pronunciations</p>
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight">English Vocabulary Trainer</h1>
+              <p className="text-[10px] sm:text-xs text-slate-500 font-medium hidden sm:block">Analyze & Master Pronunciations</p>
             </div>
           </div>
           
@@ -286,13 +286,13 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8">
         {activeTab === 'vocabulary' ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left Column: Input */}
             <section className="lg:col-span-5 flex flex-col gap-6">
-              <div className="glass-card p-6 rounded-3xl sticky top-28">
+              <div className="glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl sticky top-16 sm:top-28">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2 text-slate-800">
                     <Sparkles size={20} className="text-primary-500" />
@@ -311,7 +311,7 @@ function App() {
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Paste English text, a list of words, or a sentence here..."
-                  className="w-full h-64 bg-slate-50/50 border border-slate-200 rounded-2xl p-4 text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-primary-500 transition-all resize-none mb-4"
+                  className="w-full h-40 sm:h-64 bg-slate-50/50 border border-slate-200 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-sm sm:text-base text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-primary-500 transition-all resize-none mb-4"
                 />
 
                 <div className="flex gap-2 mb-4">
@@ -342,7 +342,7 @@ function App() {
                   </button>
                 </div>
 
-                <div className="mt-6 flex gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest border-t border-slate-100 pt-6">
+                <div className="mt-4 sm:mt-6 flex gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest border-t border-slate-100 pt-4 sm:pt-6">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 rounded-full bg-green-500"></div>
                     Automatic Parsing
@@ -357,36 +357,36 @@ function App() {
 
             {/* Right Column: Results */}
             <section className="lg:col-span-7 flex flex-col gap-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2 text-slate-800">
                   <ListFilter size={20} className="text-primary-500" />
-                  <h2 className="font-bold">Analysis Results ({results.length})</h2>
+                  <h2 className="font-bold text-sm sm:text-base">Analysis Results ({results.length})</h2>
                 </div>
                 
                 {results.length > 0 && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
                     <button
                       onClick={() => playingAccent === 'uk' ? stopPlayback() : startPlaybackAll('uk')}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                      className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                         playingAccent === 'uk' 
                           ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                           : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
                       }`}
                     >
-                      <Volume2 size={18} className={playingAccent === 'uk' ? 'animate-pulse' : ''} />
-                      {playingAccent === 'uk' ? 'Stop' : 'Listen UK'}
+                      <Volume2 size={16} className={playingAccent === 'uk' ? 'animate-pulse' : ''} />
+                      {playingAccent === 'uk' ? 'Stop' : 'UK'}
                     </button>
                     
                     <button
                       onClick={() => playingAccent === 'us' ? stopPlayback() : startPlaybackAll('us')}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                      className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                         playingAccent === 'us' 
                           ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                           : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
                       }`}
                     >
-                      <Volume2 size={18} className={playingAccent === 'us' ? 'animate-pulse' : ''} />
-                      {playingAccent === 'us' ? 'Stop' : 'Listen US'}
+                      <Volume2 size={16} className={playingAccent === 'us' ? 'animate-pulse' : ''} />
+                      {playingAccent === 'us' ? 'Stop' : 'US'}
                     </button>
                   </div>
                 )}
@@ -452,8 +452,8 @@ function App() {
         editingLesson={editingLesson}
       />
 
-      {/* Footer */}
-      <footer className="mt-auto py-8 border-t border-slate-200 bg-white">
+      {/* Footer - hidden on mobile since we have bottom nav */}
+      <footer className="mt-auto py-6 sm:py-8 border-t border-slate-200 bg-white hidden md:block">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-400">© 2026 English Vocabulary Trainer. All rights reserved.</p>
           <div className="flex items-center gap-6">
@@ -463,6 +463,39 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-lg border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+        <div className="flex items-center justify-around h-14">
+          <button
+            onClick={() => setActiveTab('vocabulary')}
+            className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
+              activeTab === 'vocabulary' ? 'text-primary-600' : 'text-slate-400'
+            }`}
+          >
+            <Search size={20} />
+            <span className="text-[10px] font-bold">Vocabulary</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('ipa')}
+            className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
+              activeTab === 'ipa' ? 'text-primary-600' : 'text-slate-400'
+            }`}
+          >
+            <Volume2 size={20} />
+            <span className="text-[10px] font-bold">IPA</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('lessons')}
+            className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
+              activeTab === 'lessons' ? 'text-primary-600' : 'text-slate-400'
+            }`}
+          >
+            <BookOpen size={20} />
+            <span className="text-[10px] font-bold">Lessons</span>
+          </button>
+        </div>
+      </nav>
     </div>
   );
 }

@@ -61,13 +61,13 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => onSelectSymbol(phoneme.symbol)}
-        className={`group relative p-4 rounded-2xl flex flex-col items-center justify-center transition-all shadow-sm hover:shadow-md
+        className={`group relative p-2.5 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all shadow-sm hover:shadow-md
           ${isSelected ? 'ring-4 ring-primary-500 z-10' : ''}
           ${phoneme.category === 'Vowels' ? 'bg-primary-50 text-primary-700 border border-primary-100 hover:bg-primary-100' : 'bg-indigo-50 text-indigo-700 border border-indigo-100 hover:bg-indigo-100'}
         `}
       >
-        <span className="text-3xl font-bold font-serif">/{phoneme.symbol}/</span>
-        <span className="text-[10px] mt-1 opacity-70 uppercase tracking-wider font-bold">{phoneme.type}</span>
+        <span className="text-xl sm:text-3xl font-bold font-serif">/{phoneme.symbol}/</span>
+        <span className="text-[9px] sm:text-[10px] mt-0.5 sm:mt-1 opacity-70 uppercase tracking-wider font-bold">{phoneme.type}</span>
         <button 
           onClick={(e) => playSound(e, phoneme)}
           className="absolute top-2 right-2 p-1.5 rounded-full bg-white/50 hover:bg-white text-current shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
@@ -91,13 +91,13 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
         
         {/* Left/Middle: The Chart */}
         <div className="lg:col-span-2 space-y-8">
           
           {/* Vowels */}
-          <div className="glass-card p-6 rounded-3xl">
+          <div className="glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl">
             <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-primary-500"></div>
               Vowels (Nguyên âm)
@@ -106,14 +106,14 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
             <div className="space-y-6">
               <div>
                 <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Monophthongs (Nguyên âm đơn)</h4>
-                <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
                   {monophthongs.map(p => <PhonemeCard key={p.symbol} phoneme={p} />)}
                 </div>
               </div>
               
               <div>
                 <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Diphthongs (Nguyên âm đôi)</h4>
-                <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
                   {diphthongs.map(p => <PhonemeCard key={p.symbol} phoneme={p} />)}
                 </div>
               </div>
@@ -121,12 +121,12 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
           </div>
 
           {/* Consonants */}
-          <div className="glass-card p-6 rounded-3xl">
+          <div className="glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl">
             <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
               Consonants (Phụ âm)
             </h3>
-            <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
               {consonants.map(p => <PhonemeCard key={p.symbol} phoneme={p} />)}
             </div>
           </div>
@@ -135,7 +135,7 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
 
         {/* Right: The Detail Panel */}
         <div className="lg:col-span-1">
-          <div className="sticky top-28">
+          <div className="lg:sticky lg:top-28">
             <AnimatePresence mode="wait">
               {selectedPhoneme ? (
                 <motion.div
@@ -143,13 +143,13 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="glass-card p-6 rounded-3xl shadow-xl border border-slate-200"
+                  className="glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200"
                 >
                   <div className="flex justify-between items-start mb-6">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{selectedPhoneme.category} • {selectedPhoneme.type}</span>
-                      <div className="flex items-center gap-4">
-                        <h2 className="text-6xl font-bold text-slate-800 font-serif">/{selectedPhoneme.symbol}/</h2>
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <h2 className="text-4xl sm:text-6xl font-bold text-slate-800 font-serif">/{selectedPhoneme.symbol}/</h2>
                         <button 
                           onClick={(e) => playSound(e, selectedPhoneme)}
                           className="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center hover:bg-primary-200 hover:scale-110 transition-all shadow-sm"
@@ -226,7 +226,7 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center h-full min-h-[400px] border border-dashed border-slate-300"
+                  className="glass-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center h-full min-h-[200px] lg:min-h-[400px] border border-dashed border-slate-300"
                 >
                   <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4">
                     <Volume2 size={32} />

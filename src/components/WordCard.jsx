@@ -167,10 +167,10 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
           : 'hover:shadow-2xl group'
       }`}
     >
-      <div className="p-5 pb-2">
+      <div className="p-3 sm:p-5 pb-2">
         <div className="flex justify-between items-start mb-3">
           <div>
-            <h3 className="text-2xl font-black text-slate-800 capitalize mb-1">{item.word}</h3>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-800 capitalize mb-1">{item.word}</h3>
             <div className="flex flex-wrap gap-1.5 mt-1">
                {item.entries?.map((e, i) => e.pos && (
                  <span key={i} className={`text-[9px] font-black px-1.5 py-0.5 rounded-full border ${getPosColor(e.pos)}`}>
@@ -217,19 +217,20 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 text-[10px] font-black tracking-widest transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 text-[9px] sm:text-[10px] font-black tracking-widest transition-all ${
               activeTab === tab.id 
                 ? 'text-primary-600 bg-white border-b-2 border-primary-600' 
                 : 'text-slate-400 hover:text-slate-600'
             }`}
           >
             {tab.icon}
-            {tab.label}
+            <span className="hidden sm:inline">{tab.label}</span>
+            <span className="sm:hidden">{tab.id === 'overview' ? 'TỔNG QUAN' : tab.id === 'usage' ? 'VÍ DỤ' : 'PHÁT ÂM'}</span>
           </button>
         ))}
       </div>
 
-      <div className="p-5 flex-1 min-h-[250px] bg-white">
+      <div className="p-3 sm:p-5 flex-1 min-h-[200px] sm:min-h-[250px] bg-white">
         <AnimatePresence mode="wait">
           {activeTab === 'overview' && (
             <motion.div key="overview" className="space-y-6">

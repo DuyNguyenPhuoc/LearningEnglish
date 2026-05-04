@@ -43,3 +43,22 @@
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+/* Mobile Improvements */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  body {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Safe area for devices with notch/home indicator */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-16 {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+}

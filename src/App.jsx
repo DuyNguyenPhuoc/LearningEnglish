@@ -6,6 +6,7 @@ import WordCard from './components/WordCard';
 import LessonsView from './components/LessonsView';
 import LessonModal from './components/LessonModal';
 import IpaView from './components/IpaView';
+import lessonsData from './data/lessons.json';
 
 function App() {
   const [inputText, setInputText] = useState('');
@@ -17,7 +18,7 @@ function App() {
   const [isListening, setIsListening] = useState(false);
 
   // Lessons State
-  const [lessons, setLessons] = useState([]);
+  const [lessons, setLessons] = useState(lessonsData);
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState(null);
 
@@ -154,33 +155,13 @@ function App() {
     if (cached) {
       setResults(JSON.parse(cached));
     }
-    
-    // Fetch lessons from the source code API
-    fetch('/api/lessons')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setLessons(data);
-        }
-      })
-      .catch(err => console.error("Failed to load lessons:", err));
   }, []);
 
   // Lessons Handlers
+  const isDev = import.meta.env.DEV;
+
   const handleSaveLesson = async (lessonData) => {
     try {
-      const method = editingLesson ? 'PUT' : 'POST';
-      const res = await fetch('/api/lessons', {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(lessonData)
-      });
-      
-      if (!res.ok) {
-        const errorText = await res.text().catch(() => 'Unknown error');
-        throw new Error(`Server returned ${res.status}: ${errorText}`);
-      }
-      
       let updatedLessons;
       if (editingLesson) {
         updatedLessons = lessons.map(l => l.id === lessonData.id ? lessonData : l);
@@ -190,26 +171,39 @@ function App() {
       setLessons(updatedLessons);
       setIsLessonModalOpen(false);
       setEditingLesson(null);
+
+      // In dev mode, persist to local lessons.json file
+      if (isDev) {
+        const method = editingLesson ? 'PUT' : 'POST';
+        const res = await fetch('/api/lessons', {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(lessonData)
+        });
+        if (!res.ok) {
+          console.error('Failed to persist lesson to local file');
+        }
+      }
     } catch (err) {
       console.error('Save lesson error:', err);
-      alert(`Failed to save lesson to source code.\n\nReason: ${err.message}\n\nMake sure you are running the app via "npm run dev" and not just opening the HTML file directly.`);
     }
   };
 
   const handleDeleteLesson = async (id) => {
     if (window.confirm('Are you sure you want to delete this lesson?')) {
-      try {
-        const res = await fetch(`/api/lessons?id=${id}`, { method: 'DELETE' });
-        if (!res.ok) {
-          const errorText = await res.text().catch(() => 'Unknown error');
-          throw new Error(`Server returned ${res.status}: ${errorText}`);
+      const updatedLessons = lessons.filter(l => l.id !== id);
+      setLessons(updatedLessons);
+
+      // In dev mode, persist to local lessons.json file
+      if (isDev) {
+        try {
+          const res = await fetch(`/api/lessons?id=${id}`, { method: 'DELETE' });
+          if (!res.ok) {
+            console.error('Failed to delete lesson from local file');
+          }
+        } catch (err) {
+          console.error('Delete lesson error:', err);
         }
-        
-        const updatedLessons = lessons.filter(l => l.id !== id);
-        setLessons(updatedLessons);
-      } catch (err) {
-        console.error('Delete lesson error:', err);
-        alert(`Failed to delete lesson from source code.\n\nReason: ${err.message}\n\nMake sure you are running the app via "npm run dev".`);
       }
     }
   };

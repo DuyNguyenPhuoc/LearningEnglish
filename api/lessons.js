@@ -29,31 +29,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // In local dev, process.cwd() is the root of the project
-    let dataPath = path.join(process.cwd(), 'src', 'data', 'lessons.json');
+    // This API is only used in local dev mode to persist changes to lessons.json
+    const dataPath = path.join(process.cwd(), 'src', 'data', 'lessons.json');
     
-    // Vercel Serverless Functions have a read-only filesystem except for /tmp
-    if (process.env.VERCEL) {
-      dataPath = path.join('/tmp', 'lessons.json');
-      try {
-        await fs.access(dataPath);
-      } catch {
-        // Seed /tmp with the bundled source data if it doesn't exist yet
-        try {
-          const originalPath = path.join(process.cwd(), 'src', 'data', 'lessons.json');
-          const originalData = await fs.readFile(originalPath, 'utf8');
-          await fs.writeFile(dataPath, originalData, 'utf8');
-        } catch {
-          await fs.writeFile(dataPath, '[]', 'utf8');
-        }
-      }
-    } else {
-      // Ensure file exists locally
-      try {
-        await fs.access(dataPath);
-      } catch {
-        await fs.writeFile(dataPath, '[]', 'utf8');
-      }
+    // Ensure file exists locally
+    try {
+      await fs.access(dataPath);
+    } catch {
+      await fs.writeFile(dataPath, '[]', 'utf8');
     }
 
     if (req.method === 'GET') {

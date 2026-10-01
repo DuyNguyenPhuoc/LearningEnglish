@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, MicOff, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchWordDetails, parseTextToWords, CACHE_KEY } from './services/dictionary';
+import { playWordAudio, stopWordAudio } from './services/audioPlayer';
 import WordCard from './components/WordCard';
 import LessonsView from './components/LessonsView';
 import LessonModal from './components/LessonModal';
@@ -16,6 +17,8 @@ function App() {
   const [playingIndex, setPlayingIndex] = useState(-1);
   const [playingAccent, setPlayingAccent] = useState(null); // 'uk' or 'us'
   const [isListening, setIsListening] = useState(false);
+  const playingAccentRef = useRef(null);
+  const stopTimeoutRef = useRef(null);
 
   // Lessons State
   const [lessons, setLessons] = useState(lessonsData);
@@ -105,48 +108,55 @@ function App() {
   };
 
   const startPlaybackAll = (accent) => {
+    stopPlayback();
+    playingAccentRef.current = accent;
     setPlayingAccent(accent);
     playNext(0, accent);
   };
 
   const stopPlayback = () => {
-    if (window._currentAudio) {
-      window._currentAudio.pause();
+    if (stopTimeoutRef.current) {
+      clearTimeout(stopTimeoutRef.current);
+      stopTimeoutRef.current = null;
     }
+    playingAccentRef.current = null;
+    stopWordAudio();
     setPlayingIndex(-1);
     setPlayingAccent(null);
   };
 
   // Sequential Playback Engine
-  const playNext = (index, accent) => {
-    if (index >= results.length) {
+  const playNext = async (index, accent) => {
+    if (index >= results.length || playingAccentRef.current !== accent) {
       setPlayingIndex(-1);
       setPlayingAccent(null);
+      playingAccentRef.current = null;
       return;
     }
 
     const item = results[index];
-    const audioUrl = item.found ? item.phonetics[accent]?.audio : null;
-
-    if (!item.found || !audioUrl) {
-      // Skip words with no audio for this accent
+    if (!item || !item.word) {
       playNext(index + 1, accent);
       return;
     }
 
     setPlayingIndex(index);
     setPlayingAccent(accent);
-    
-    const audio = new Audio(audioUrl);
-    audio.onended = () => {
-      // Small delay between words for better UX
-      setTimeout(() => playNext(index + 1, accent), 500);
-    };
-    audio.onerror = () => playNext(index + 1, accent);
-    audio.play();
 
-    // Store audio object so we can stop it if needed
-    window._currentAudio = audio;
+    const audioUrl = item.phonetics?.[accent]?.audio;
+    await playWordAudio({
+      word: item.word,
+      accent,
+      audioUrl
+    });
+
+    if (playingAccentRef.current !== accent) return;
+
+    stopTimeoutRef.current = setTimeout(() => {
+      if (playingAccentRef.current === accent) {
+        playNext(index + 1, accent);
+      }
+    }, 400);
   };
 
   // Load results from cache on mount

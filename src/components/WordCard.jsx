@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Volume2, Copy, Check, Info, Book, MessageSquare, Mic2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { phoneticsVN } from '../data/phonetics_vn';
+import { playWordAudio } from '../services/audioPlayer';
 
-const WordCard = ({ item, onPlayAudio, isActive }) => {
+const WordCard = ({ item, isActive, onSelectPhoneme }) => {
   const [copied, setCopied] = React.useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [playingAccent, setPlayingAccent] = useState(null); // 'uk' | 'us' | 'word' | null
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -13,11 +15,14 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const playAudio = (audioUrl) => {
-    if (audioUrl) {
-      const audio = new Audio(audioUrl);
-      audio.play();
-    }
+  const handlePlayAudio = async (accent = 'us', audioUrl = null) => {
+    setPlayingAccent(accent);
+    await playWordAudio({
+      word: item.word,
+      accent,
+      audioUrl: audioUrl || item.phonetics?.[accent]?.audio,
+      onEnd: () => setPlayingAccent(null)
+    });
   };
 
   const getPosColor = (pos) => {
@@ -111,7 +116,7 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
           s.isPhoneme ? (
             <button
               key={idx}
-              onClick={() => onSelectPhoneme(s.text)}
+              onClick={() => onSelectPhoneme && onSelectPhoneme(s.text)}
               className="hover:text-primary-600 hover:bg-primary-50 rounded px-0.5 transition-colors cursor-pointer"
               title={`View detail for /${s.text}/`}
             >
@@ -179,18 +184,32 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
                ))}
             </div>
           </div>
-          <button 
-            onClick={() => copyToClipboard(item.word)}
-            className="p-2 text-slate-300 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
-          >
-            {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} />}
-          </button>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => handlePlayAudio('us')}
+              className={`p-2 rounded-lg transition-colors ${
+                playingAccent === 'us'
+                  ? 'text-primary-600 bg-primary-100 animate-pulse'
+                  : 'text-slate-400 hover:text-primary-600 hover:bg-primary-50'
+              }`}
+              title="Phát âm từ này (US)"
+            >
+              <Volume2 size={18} />
+            </button>
+            <button 
+              onClick={() => copyToClipboard(item.word)}
+              className="p-2 text-slate-300 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+              title="Sao chép từ"
+            >
+              {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} />}
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
           {['uk', 'us'].map((acc) => {
-            const data = item.phonetics[acc];
-            if (!data) return null;
+            const data = item.phonetics?.[acc] || { text: '', audio: '' };
+            const isPlaying = playingAccent === acc;
             return (
               <div key={acc} className="flex items-center gap-1.5 bg-white/50 border border-slate-100 rounded-lg px-2.5 py-1">
                 <span className={`text-[9px] font-black px-1 rounded ${acc === 'uk' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
@@ -200,11 +219,15 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
                   {renderClickableIpa(data.text)}
                 </span>
                 <button 
-                  onClick={() => playAudio(data.audio)}
-                  disabled={!data.audio}
-                  className="p-1 text-slate-400 hover:text-primary-600 transition-colors disabled:opacity-20"
+                  onClick={() => handlePlayAudio(acc, data.audio)}
+                  className={`p-1 transition-colors rounded ${
+                    isPlaying 
+                      ? 'text-primary-600 bg-primary-100 animate-pulse' 
+                      : 'text-slate-400 hover:text-primary-600 hover:bg-slate-100'
+                  }`}
+                  title={`Nghe phát âm (${acc.toUpperCase()})`}
                 >
-                  <Volume2 size={14} />
+                  <Volume2 size={14} className={isPlaying ? 'scale-110' : ''} />
                 </button>
               </div>
             );
@@ -304,6 +327,31 @@ const WordCard = ({ item, onPlayAudio, isActive }) => {
 
           {activeTab === 'pronunciation' && (
             <motion.div key="pronunciation" className="space-y-4">
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handlePlayAudio('uk')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all border ${
+                    playingAccent === 'uk'
+                      ? 'bg-orange-500 text-white border-orange-500 shadow-md animate-pulse'
+                      : 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100'
+                  }`}
+                >
+                  <Volume2 size={16} />
+                  Nghe giọng UK
+                </button>
+                <button
+                  onClick={() => handlePlayAudio('us')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all border ${
+                    playingAccent === 'us'
+                      ? 'bg-blue-500 text-white border-blue-500 shadow-md animate-pulse'
+                      : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                  }`}
+                >
+                  <Volume2 size={16} />
+                  Nghe giọng US
+                </button>
+              </div>
+
               <div className="bg-primary-600 text-white p-5 rounded-2xl shadow-xl shadow-primary-100">
                 <h4 className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">Trọng âm (Word Stress)</h4>
                 <p className="text-sm font-black leading-tight">{stressInfo}</p>

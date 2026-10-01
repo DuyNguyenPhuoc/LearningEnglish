@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = '/api/dictionary';
-export const CACHE_KEY = 'ev-trainer-cache-v4'; // Increment version to clear bugged phonetics cache
+export const CACHE_KEY = 'ev-trainer-cache-v5'; // Clears outdated Cambridge cache with Oxford & Google TTS
 
 // Simple in-memory cache for the current session
 const memoryCache = {};

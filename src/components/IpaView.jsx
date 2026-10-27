@@ -49,9 +49,10 @@ const IpaView = ({ selectedSymbol, onSelectSymbol, onSearchWord, currentResults 
   // Find words in current analysis results that use this phoneme
   const relatedWords = selectedSymbol ? currentResults.filter(item => {
     if (!item.found) return false;
-    const ukIpa = item.phonetics?.uk?.text || '';
-    const usIpa = item.phonetics?.us?.text || '';
-    return ukIpa.includes(selectedSymbol) || usIpa.includes(selectedSymbol);
+    const ipaTexts = item.pronunciations?.length
+      ? item.pronunciations.flatMap(g => [...g.uk, ...g.us].map(p => p.text))
+      : [item.phonetics?.uk?.text || '', item.phonetics?.us?.text || ''];
+    return ipaTexts.some(text => text.includes(selectedSymbol));
   }) : [];
 
   const PhonemeCard = ({ phoneme }) => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = '/api/dictionary';
-export const CACHE_KEY = 'ev-trainer-cache-v5'; // Clears outdated Cambridge cache with Oxford & Google TTS
+export const CACHE_KEY = 'ev-trainer-cache-v7'; // v7: refetch so -s/-ing/-ed forms get pronunciations from their base word
 
 // Simple in-memory cache for the current session
 const memoryCache = {};
@@ -30,6 +30,12 @@ export const fetchWordDetails = async (word) => {
     // Use query parameter for better compatibility with Vercel routing
     const response = await axios.get(`${API_BASE_URL}?word=${normalizedWord}`);
     const result = response.data;
+
+    // Meanings missing only because translation sources were unavailable: don't cache,
+    // so the next analysis tries again instead of keeping the word without meanings forever
+    if (result.found && !(result.vnEntries?.length > 0)) {
+      return result;
+    }
 
     // Save to Cache
     memoryCache[normalizedWord] = result;

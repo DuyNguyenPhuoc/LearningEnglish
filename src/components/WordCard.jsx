@@ -7,7 +7,8 @@ import { playWordAudio } from '../services/audioPlayer';
 const WordCard = ({ item, isActive, onSelectPhoneme }) => {
   const [copied, setCopied] = React.useState(false);
   const [activeTab, setActiveTab] = useState('overview');
-  const [playingAccent, setPlayingAccent] = useState(null); // 'uk' | 'us' | 'word' | null
+  const [playingAccent, setPlayingAccent] = useState(null); // 'uk' | 'us' | 'word' | per-variant key | null
+  const [selectedIpaIdx, setSelectedIpaIdx] = useState(0);
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -15,12 +16,13 @@ const WordCard = ({ item, isActive, onSelectPhoneme }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handlePlayAudio = async (accent = 'us', audioUrl = null) => {
-    setPlayingAccent(accent);
+  const handlePlayAudio = async (accent = 'us', audioUrl = null, playKey = null) => {
+    setPlayingAccent(playKey || accent);
     await playWordAudio({
       word: item.word,
       accent,
-      audioUrl: audioUrl || item.phonetics?.[accent]?.audio,
+      // '' (no recording for this variant) skips straight to TTS instead of playing another variant
+      audioUrl: audioUrl ?? item.phonetics?.[accent]?.audio,
       onEnd: () => setPlayingAccent(null)
     });
   };
@@ -153,7 +155,29 @@ const WordCard = ({ item, isActive, onSelectPhoneme }) => {
     { id: 'pronunciation', label: 'CÁCH PHÁT ÂM', icon: <Mic2 size={14} /> },
   ];
 
-  const ipaText = item.phonetics.uk?.text || item.phonetics.us?.text || '';
+  // Every pronunciation, grouped by the parts of speech that share it
+  // (e.g. record: noun /ˈrekɔːd/, verb /rɪˈkɔːd/). Older cached results only have phonetics.uk/us.
+  const pronunciationGroups = item.pronunciations?.length
+    ? item.pronunciations
+    : [{
+        pos: [],
+        uk: [item.phonetics?.uk || { text: '', audio: '' }],
+        us: [item.phonetics?.us || { text: '', audio: '' }]
+      }];
+
+  // Distinct IPA strings the pronunciation tab can analyse
+  const ipaOptions = [];
+  pronunciationGroups.forEach((group) => {
+    ['uk', 'us'].forEach((acc) => {
+      group[acc].forEach((pron) => {
+        if (pron.text && !ipaOptions.some(o => o.text === pron.text)) {
+          ipaOptions.push({ text: pron.text, accent: acc, pos: group.pos, label: pron.label });
+        }
+      });
+    });
+  });
+
+  const ipaText = ipaOptions[selectedIpaIdx]?.text || ipaOptions[0]?.text || '';
   const stressInfo = getStressInfo(ipaText);
   const narrativeGuide = generateNarrativeGuide(ipaText);
 
@@ -176,6 +200,12 @@ const WordCard = ({ item, isActive, onSelectPhoneme }) => {
         <div className="flex justify-between items-start mb-3">
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-800 capitalize mb-1">{item.word}</h3>
+            {item.baseWord && (
+              <p className="text-[10px] text-slate-400 mb-1">
+                Dạng biến đổi của <span className="font-black text-slate-600">{item.baseWord}</span>
+                {' · '}phiên âm "suy ra" được tính theo quy tắc từ phiên âm của từ gốc
+              </p>
+            )}
             <div className="flex flex-wrap gap-1.5 mt-1">
                {item.entries?.map((e, i) => e.pos && (
                  <span key={i} className={`text-[9px] font-black px-1.5 py-0.5 rounded-full border ${getPosColor(e.pos)}`}>
@@ -206,32 +236,50 @@ const WordCard = ({ item, isActive, onSelectPhoneme }) => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          {['uk', 'us'].map((acc) => {
-            const data = item.phonetics?.[acc] || { text: '', audio: '' };
-            const isPlaying = playingAccent === acc;
-            return (
-              <div key={acc} className="flex items-center gap-1.5 bg-white/50 border border-slate-100 rounded-lg px-2.5 py-1">
-                <span className={`text-[9px] font-black px-1 rounded ${acc === 'uk' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
-                  {acc.toUpperCase()}
-                </span>
-                <span className="text-xs font-semibold text-slate-600 font-mono">
-                  {renderClickableIpa(data.text)}
-                </span>
-                <button 
-                  onClick={() => handlePlayAudio(acc, data.audio)}
-                  className={`p-1 transition-colors rounded ${
-                    isPlaying 
-                      ? 'text-primary-600 bg-primary-100 animate-pulse' 
-                      : 'text-slate-400 hover:text-primary-600 hover:bg-slate-100'
-                  }`}
-                  title={`Nghe phát âm (${acc.toUpperCase()})`}
-                >
-                  <Volume2 size={14} className={isPlaying ? 'scale-110' : ''} />
-                </button>
+        <div className="space-y-2.5 mb-4">
+          {pronunciationGroups.map((group, gi) => (
+            <div key={gi} className="flex flex-col gap-1.5">
+              {pronunciationGroups.length > 1 && group.pos.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {group.pos.map((p) => (
+                    <span key={p} className={`text-[9px] font-black px-1.5 py-0.5 rounded-full border ${getPosColor(p)}`}>
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="flex flex-wrap gap-2">
+                {['uk', 'us'].flatMap((acc) => group[acc].map((pron, vi) => {
+                  const playKey = `${acc}-${gi}-${vi}`;
+                  const isPlaying = playingAccent === playKey;
+                  return (
+                    <div key={playKey} className="flex items-center gap-1.5 bg-white/50 border border-slate-100 rounded-lg px-2.5 py-1">
+                      <span className={`text-[9px] font-black px-1 rounded ${acc === 'uk' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
+                        {acc.toUpperCase()}
+                      </span>
+                      {pron.label && (
+                        <span className="text-[9px] italic text-slate-400">{pron.label}</span>
+                      )}
+                      <span className="text-xs font-semibold text-slate-600 font-mono">
+                        {renderClickableIpa(pron.text)}
+                      </span>
+                      <button
+                        onClick={() => handlePlayAudio(acc, pron.audio, playKey)}
+                        className={`p-1 transition-colors rounded ${
+                          isPlaying
+                            ? 'text-primary-600 bg-primary-100 animate-pulse'
+                            : 'text-slate-400 hover:text-primary-600 hover:bg-slate-100'
+                        }`}
+                        title={`Nghe phát âm (${acc.toUpperCase()}${pron.label ? ` – ${pron.label}` : ''})`}
+                      >
+                        <Volume2 size={14} className={isPlaying ? 'scale-110' : ''} />
+                      </button>
+                    </div>
+                  );
+                }))}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -260,6 +308,16 @@ const WordCard = ({ item, isActive, onSelectPhoneme }) => {
               {/* Vietnamese Meanings */}
               <div className="space-y-4">
                 <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-tighter">Nghĩa Tiếng Việt</h4>
+                {!(item.vnEntries?.length > 0) && (
+                  <p className="text-xs text-slate-400 italic">
+                    Chưa lấy được nghĩa tiếng Việt cho từ này. Hãy phân tích lại sau ít phút.
+                  </p>
+                )}
+                {item.vnLemma && (
+                  <p className="text-xs text-slate-500">
+                    Dạng biến đổi của <span className="font-black text-slate-700">{item.vnLemma}</span> — nghĩa của từ gốc:
+                  </p>
+                )}
                 {item.vnEntries?.map((entry, i) => (
                   <div key={i} className="space-y-2">
                     <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border italic ${getPosColor(entry.pos)}`}>
@@ -275,6 +333,16 @@ const WordCard = ({ item, isActive, onSelectPhoneme }) => {
                     </ul>
                   </div>
                 ))}
+                {item.vnSource === 'wiktionary' && (
+                  <a
+                    href={`https://vi.wiktionary.org/wiki/${encodeURIComponent(item.word)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-[9px] text-slate-300 hover:text-primary-600"
+                  >
+                    Nguồn: Wiktionary tiếng Việt (CC BY-SA)
+                  </a>
+                )}
               </div>
 
               {/* English Definitions */}
@@ -352,8 +420,30 @@ const WordCard = ({ item, isActive, onSelectPhoneme }) => {
                 </button>
               </div>
 
+              {ipaOptions.length > 1 && (
+                <div className="space-y-2">
+                  <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-tighter">Chọn cách phát âm để phân tích</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ipaOptions.map((opt, idx) => (
+                      <button
+                        key={opt.text}
+                        onClick={() => setSelectedIpaIdx(idx)}
+                        className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[10px] font-bold transition-colors ${
+                          idx === selectedIpaIdx
+                            ? 'bg-primary-600 text-white border-primary-600'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'
+                        }`}
+                      >
+                        <span className="opacity-70">{[opt.pos.join(', '), opt.accent.toUpperCase(), opt.label].filter(Boolean).join(' · ')}</span>
+                        <span className="font-mono">{opt.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="bg-primary-600 text-white p-5 rounded-2xl shadow-xl shadow-primary-100">
-                <h4 className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">Trọng âm (Word Stress)</h4>
+                <h4 className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">Trọng âm (Word Stress) {ipaOptions.length > 1 && <span className="font-mono normal-case tracking-normal">{ipaText}</span>}</h4>
                 <p className="text-sm font-black leading-tight">{stressInfo}</p>
               </div>
 

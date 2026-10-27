@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, MicOff, Menu } from 'lucide-react';
+import { Search, Sparkles, BookOpen, Trash2, Loader2, ListFilter, Volume2, Mic, MicOff, Menu, Network } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchWordDetails, parseTextToWords, CACHE_KEY } from './services/dictionary';
 import { playWordAudio, stopWordAudio } from './services/audioPlayer';
@@ -7,6 +7,7 @@ import WordCard from './components/WordCard';
 import LessonsView from './components/LessonsView';
 import LessonModal from './components/LessonModal';
 import IpaView from './components/IpaView';
+import MindmapView from './components/MindmapView';
 import lessonsData from './data/lessons.json';
 
 function App() {
@@ -32,9 +33,9 @@ function App() {
   const handleSearchWord = (word) => {
     setInputText(word);
     setActiveTab('vocabulary');
-    // We need to wait for the tab to switch and the DOM to be ready
+    // Wait for the tab to switch, then click the button so the latest inputText is analyzed
     setTimeout(() => {
-      handleAnalyze();
+      document.getElementById('analyze-btn')?.click();
     }, 100);
   };
 
@@ -278,7 +279,13 @@ function App() {
             >
               44 IPA Chart
             </button>
-            <button 
+            <button
+              onClick={() => setActiveTab('mindmap')}
+              className={`text-sm font-semibold transition-colors ${activeTab === 'mindmap' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              Mindmap
+            </button>
+            <button
               onClick={() => setActiveTab('lessons')}
               className={`text-sm font-semibold transition-colors ${activeTab === 'lessons' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-800'}`}
             >
@@ -432,6 +439,11 @@ function App() {
             onSearchWord={handleSearchWord}
             currentResults={results}
           />
+        ) : activeTab === 'mindmap' ? (
+          <MindmapView
+            onSearchWord={handleSearchWord}
+            onSelectPhoneme={handleSelectPhoneme}
+          />
         ) : (
           <LessonsView 
             lessons={lessons}
@@ -488,6 +500,15 @@ function App() {
           >
             <Volume2 size={20} />
             <span className="text-[10px] font-bold">IPA</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('mindmap')}
+            className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
+              activeTab === 'mindmap' ? 'text-primary-600' : 'text-slate-400'
+            }`}
+          >
+            <Network size={20} />
+            <span className="text-[10px] font-bold">Mindmap</span>
           </button>
           <button
             onClick={() => setActiveTab('lessons')}

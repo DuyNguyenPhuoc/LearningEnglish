@@ -62,3 +62,13 @@
     padding-bottom: calc(4rem + env(safe-area-inset-bottom));
   }
 }
+
+/* Mindmap: fade in subtrees when a branch opens (opacity only, so measured positions stay stable) */
+@keyframes mm-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mm-fade {
+  animation: mm-fade-in 0.25s ease-out;
+}
